@@ -88,10 +88,11 @@
       height: 120px;
       font-size: 65px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: opacity 0.2s ease;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       position: relative;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .emoji-button::before {
@@ -107,19 +108,20 @@
       transform: translate(-50%, -50%);
     }
 
-    .emoji-button:hover::before {
-      width: 120px;
-      height: 120px;
+    /* Hover antes apenas para desktop */
+    @media (hover: hover) {
+      .emoji-button:hover::before {
+        width: 120px;
+        height: 120px;
+      }
     }
 
-    .emoji-button:hover {
-      transform: translateY(-8px) scale(1.1);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    }
-
-    .emoji-button:active {
-      transform: translateY(-4px) scale(1.05);
-      transition: all 0.1s ease;
+    /* Hover apenas para desktop */
+    @media (hover: hover) {
+      .emoji-button:hover {
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      }
     }
 
     .emoji-button.happy {
@@ -132,16 +134,6 @@
 
     .emoji-button.sad {
       background: linear-gradient(135deg, #4a6350 0%, #3d4f42 100%);
-    }
-
-    .emoji-button.clicked {
-      animation: clickPulse 0.6s ease-out;
-    }
-
-    @keyframes clickPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
     }
 
     .message {
@@ -237,21 +229,6 @@
       }
     }
 
-    /* Animação de loading */
-    .loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .loading .emoji-button {
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.7; }
-      50% { opacity: 1; }
-    }
-
     /* Efeito de partículas ao clicar */
     .particle {
       position: absolute;
@@ -274,12 +251,6 @@
       }
     }
 
-    @keyframes resetPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
     .footer {
       margin-top: 30px;
       padding-top: 20px;
@@ -298,6 +269,7 @@
       color: #4a6350;
       font-weight: 600;
     }
+    
   </style>
 </head>
 <body>
@@ -346,14 +318,18 @@
     }
 
     function enviarVoto(emoji, button) {
-      // Adiciona classe de clique
-      button.classList.add('clicked');
+      console.log('Função enviarVoto chamada com:', emoji);
       
       // Cria efeito de partículas
       createParticles(button);
       
-      // Adiciona estado de loading
-      document.querySelector('.container').classList.add('loading');
+      const dados = { 
+        emoji: emoji,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      };
+      
+      console.log('Enviando dados:', dados);
       
       fetch(scriptURL, {
         method: 'POST',
@@ -361,74 +337,39 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ 
-          emoji: emoji,
-          timestamp: new Date().toISOString(),
-          userAgent: navigator.userAgent
-        })
+        body: JSON.stringify(dados)
       })
       .then(() => {
+        console.log('Fetch executado com sucesso');
         setTimeout(() => {
-          document.querySelector('.container').classList.remove('loading');
           document.getElementById("mensagem").classList.add('show');
+          console.log('Mensagem exibida');
           
-          // Remove a mensagem e reseta o estado após 4 segundos
+          // Remove a mensagem após 4 segundos
           setTimeout(() => {
             document.getElementById("mensagem").classList.remove('show');
-            
-            // Reseta todos os botões após mais 1 segundo
-            setTimeout(() => {
-              resetarBotoes();
-            }, 1000);
+            console.log('Mensagem removida');
           }, 4000);
-        }, 1000);
+        }, 500);
       })
       .catch(err => {
-        document.querySelector('.container').classList.remove('loading');
+        console.error('Erro no fetch:', err);
         alert("Erro ao registrar o voto. Tente novamente.");
-        console.error('Erro:', err);
-        
-        // Reseta os botões mesmo em caso de erro
-        setTimeout(() => {
-          resetarBotoes();
-        }, 1000);
-      });
-      
-      // Remove classe de clique após animação
-      setTimeout(() => {
-        button.classList.remove('clicked');
-      }, 600);
-    }
-
-    function resetarBotoes() {
-      // Remove todas as classes visuais dos botões
-      document.querySelectorAll('.emoji-button').forEach(btn => {
-        btn.classList.remove('clicked');
-        btn.style.transform = '';
-        btn.style.boxShadow = '';
-      });
-      
-      // Adiciona uma animação suave de reset
-      document.querySelectorAll('.emoji-button').forEach((btn, index) => {
-        setTimeout(() => {
-          btn.style.animation = 'resetPulse 0.5s ease-out';
-          setTimeout(() => {
-            btn.style.animation = '';
-          }, 500);
-        }, index * 100);
       });
     }
 
-    // Adiciona efeito de hover no mobile
+    // Touch feedback otimizado para mobile
     document.querySelectorAll('.emoji-button').forEach(button => {
-      button.addEventListener('touchstart', function() {
-        this.style.transform = 'translateY(-4px) scale(1.05)';
+      button.addEventListener('touchstart', function(e) {
+        this.style.opacity = '0.8';
       });
       
-      button.addEventListener('touchend', function() {
-        setTimeout(() => {
-          this.style.transform = '';
-        }, 150);
+      button.addEventListener('touchend', function(e) {
+        this.style.opacity = '1';
+      });
+      
+      button.addEventListener('touchcancel', function(e) {
+        this.style.opacity = '1';
       });
     });
 
