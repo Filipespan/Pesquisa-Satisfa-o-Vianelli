@@ -195,6 +195,11 @@
         font-size: 18px;
         padding: 20px;
       }
+
+      .footer {
+        margin-top: 25px;
+        font-size: 13px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -224,6 +229,11 @@
       .message {
         font-size: 16px;
         padding: 18px;
+      }
+
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
       }
     }
 
@@ -269,6 +279,25 @@
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+
+    .footer {
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(89, 117, 98, 0.2);
+      color: #597562;
+      font-size: 14px;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer:hover {
+      opacity: 1;
+    }
+
+    .footer strong {
+      color: #4a6350;
+      font-weight: 600;
+    }
   </style>
 </head>
 <body>
@@ -283,6 +312,10 @@
     
     <div id="mensagem" class="message">
       Voto registrado com sucesso! Obrigado pelo seu feedback.
+    </div>
+    
+    <div class="footer">
+      Desenvolvido pela equipe <strong>Vianelli®</strong>
     </div>
   </div>
 
