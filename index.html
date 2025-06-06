@@ -176,7 +176,7 @@
 
       .footer {
         margin-top: 25px;
-        font-size: 13px;
+        font-size: 17px;
       }
     }
 
@@ -211,7 +211,7 @@
 
       .footer {
         margin-top: 20px;
-        font-size: 12px;
+        font-size: 17px;
       }
     }
 
@@ -242,7 +242,7 @@
       padding-top: 20px;
       border-top: 1px solid rgba(89, 117, 98, 0.2);
       color: #597562;
-      font-size: 14px;
+      font-size: 17px;
       opacity: 0.8;
       transition: opacity 0.3s ease;
     }
@@ -260,7 +260,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Como você se sente em relação à empresa hoje?</h1>
+    <h1 style="font-size: 22px;">Como você se sente em relação à empresa hoje?</h1>
     
     <div class="emoji-container">
       <button class="emoji-button happy" onclick="enviarVoto('😃', this)">😃</button>
@@ -314,7 +314,7 @@
       
       console.log('Função enviarVoto chamada com:', emoji);
       
-      // Bloqueia votação por 10 segundos
+      // Bloqueia votação por 15 segundos
       votingBlocked = true;
       desabilitarBotoes();
       
@@ -343,11 +343,11 @@
           document.getElementById("mensagem").classList.add('show');
           console.log('Mensagem exibida');
           
-          // Remove a mensagem após 4 segundos
+          // Remove a mensagem após 5 segundos
           setTimeout(() => {
             document.getElementById("mensagem").classList.remove('show');
             console.log('Mensagem removida');
-          }, 4000);
+          }, 5000);
         }, 500);
       })
       .catch(err => {
@@ -355,12 +355,12 @@
         alert("Erro ao registrar o voto. Tente novamente.");
       });
       
-      // Reabilita votação após 10 segundos
+      // Reabilita votação após 15 segundos
       setTimeout(() => {
         votingBlocked = false;
         habilitarBotoes();
         console.log('Votação reabilitada');
-      }, 10000);
+      }, 15000);
     }
 
     function desabilitarBotoes() {
@@ -378,8 +378,6 @@
         btn.style.pointerEvents = 'auto';
       });
     }
-
-
 
     // Efeito de entrada suave
     window.addEventListener('load', () => {
