@@ -317,8 +317,20 @@
       }
     }
 
+    let votingBlocked = false;
+
     function enviarVoto(emoji, button) {
+      // Verifica se está bloqueado
+      if (votingBlocked) {
+        console.log('Votação bloqueada - aguarde');
+        return;
+      }
+      
       console.log('Função enviarVoto chamada com:', emoji);
+      
+      // Bloqueia votação por 10 segundos
+      votingBlocked = true;
+      desabilitarBotoes();
       
       // Cria efeito de partículas
       createParticles(button);
@@ -355,6 +367,29 @@
       .catch(err => {
         console.error('Erro no fetch:', err);
         alert("Erro ao registrar o voto. Tente novamente.");
+      });
+      
+      // Reabilita votação após 10 segundos
+      setTimeout(() => {
+        votingBlocked = false;
+        habilitarBotoes();
+        console.log('Votação reabilitada');
+      }, 10000);
+    }
+
+    function desabilitarBotoes() {
+      document.querySelectorAll('.emoji-button').forEach(btn => {
+        btn.style.opacity = '0.4';
+        btn.style.cursor = 'not-allowed';
+        btn.style.pointerEvents = 'none';
+      });
+    }
+
+    function habilitarBotoes() {
+      document.querySelectorAll('.emoji-button').forEach(btn => {
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.style.pointerEvents = 'auto';
       });
     }
 
