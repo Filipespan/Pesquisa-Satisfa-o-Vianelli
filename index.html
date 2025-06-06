@@ -88,41 +88,27 @@
       height: 120px;
       font-size: 65px;
       cursor: pointer;
-      transition: opacity 0.2s ease;
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
       position: relative;
-      overflow: hidden;
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      outline: none;
     }
 
-    .emoji-button::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
-      transition: all 0.6s ease;
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
+    .emoji-button:focus {
+      outline: none;
     }
 
-    /* Hover antes apenas para desktop */
-    @media (hover: hover) {
-      .emoji-button:hover::before {
-        width: 120px;
-        height: 120px;
-      }
+    .emoji-button:active {
+      outline: none;
     }
 
-    /* Hover apenas para desktop */
-    @media (hover: hover) {
-      .emoji-button:hover {
-        transform: translateY(-8px) scale(1.1);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      }
-    }
+
 
     .emoji-button.happy {
       background: linear-gradient(135deg, #7a9180 0%, #597562 100%);
@@ -393,20 +379,7 @@
       });
     }
 
-    // Touch feedback otimizado para mobile
-    document.querySelectorAll('.emoji-button').forEach(button => {
-      button.addEventListener('touchstart', function(e) {
-        this.style.opacity = '0.8';
-      });
-      
-      button.addEventListener('touchend', function(e) {
-        this.style.opacity = '1';
-      });
-      
-      button.addEventListener('touchcancel', function(e) {
-        this.style.opacity = '1';
-      });
-    });
+
 
     // Efeito de entrada suave
     window.addEventListener('load', () => {
